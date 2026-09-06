@@ -17,49 +17,29 @@ export default function Dashboard() {
     let active = true
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        router.replace('/login')
-        return
-      }
+      if (!user) { router.replace('/login'); return }
       setEmail(user.email || '')
       const { data } = await supabase.from('profiles').select('full_name, role').eq('id', user.id).single()
-      if (active) {
-        setProfile(data)
-        setLoading(false)
-      }
+      if (active) { setProfile(data); setLoading(false) }
     }
     load()
     return () => { active = false }
   }, [router])
 
   async function logout() {
-    await supabase.auth.signOut()
-    router.replace('/')
-    router.refresh()
+    await supabase.auth.signOut(); router.replace('/'); router.refresh()
   }
 
   if (loading) return <main className="section"><div className="container"><p className="muted">Loading your dashboard...</p></div></main>
-
   const role = profile?.role || 'client'
-  return (
-    <main className="section">
-      <div className="container">
-        <div className="sectionhead">
-          <div>
-            <span className="pill">HUNAR dashboard</span>
-            <h1>Welcome{profile?.full_name ? `, ${profile.full_name}` : ''}.</h1>
-            <p className="muted">{email} · {role}</p>
-          </div>
-          <button className="btn" onClick={logout}>Log out</button>
-        </div>
-
-        <div className="grid" style={{ marginTop: 28 }}>
-          <Link className="card" href="/talent"><h3>Find Talent</h3><p className="muted">Discover skilled Pakistani freelancers.</p></Link>
-          <Link className="card" href="/work"><h3>Find Work</h3><p className="muted">Explore opportunities and freelance work.</p></Link>
-          <Link className="card" href="/categories"><h3>Browse Categories</h3><p className="muted">Explore services by skill and category.</p></Link>
-          <Link className="card" href="/checkout"><h3>Orders & Checkout</h3><p className="muted">Review your marketplace purchase flow.</p></Link>
-        </div>
-      </div>
-    </main>
-  )
+  return <main className="section"><div className="container">
+    <div className="sectionhead"><div><span className="pill">HUNAR dashboard</span><h1>Welcome{profile?.full_name ? `, ${profile.full_name}` : ''}.</h1><p className="muted">{email} · {role}</p></div><button className="btn" onClick={logout}>Log out</button></div>
+    <div className="grid" style={{marginTop:28}}>
+      <Link className="card" href="/profile"><h3>My Profile</h3><p className="muted">Update your name, username, bio and location.</p></Link>
+      <Link className="card" href="/talent"><h3>Find Talent</h3><p className="muted">Discover skilled Pakistani freelancers.</p></Link>
+      <Link className="card" href="/work"><h3>Find Work</h3><p className="muted">Explore opportunities and freelance work.</p></Link>
+      <Link className="card" href="/categories"><h3>Browse Categories</h3><p className="muted">Explore services by skill and category.</p></Link>
+      <Link className="card" href="/checkout"><h3>Orders & Checkout</h3><p className="muted">Review your marketplace purchase flow.</p></Link>
+    </div>
+  </div></main>
 }
