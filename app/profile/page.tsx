@@ -10,6 +10,7 @@ export default function ProfilePage() {
   const [username, setUsername] = useState('')
   const [bio, setBio] = useState('')
   const [location, setLocation] = useState('Pakistan')
+  const [avatarUrl, setAvatarUrl] = useState('')
   const [role, setRole] = useState('client')
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(true)
@@ -22,12 +23,13 @@ export default function ProfilePage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.replace('/login'); return }
       setEmail(user.email || '')
-      const { data } = await supabase.from('profiles').select('full_name, username, bio, location, role').eq('id', user.id).single()
+      const { data } = await supabase.from('profiles').select('full_name, username, bio, location, avatar_url, role').eq('id', user.id).single()
       if (data) {
         setName(data.full_name || '')
         setUsername(data.username || '')
         setBio(data.bio || '')
         setLocation(data.location || 'Pakistan')
+        setAvatarUrl(data.avatar_url || '')
         setRole(data.role || 'client')
       }
       setLoading(false)
@@ -39,7 +41,7 @@ export default function ProfilePage() {
     e.preventDefault(); setSaving(true); setError(''); setMessage('')
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { router.replace('/login'); return }
-    const { error: updateError } = await supabase.from('profiles').update({ full_name: name.trim(), username: username.trim() || null, bio: bio.trim() || null, location: location.trim() || null }).eq('id', user.id)
+    const { error: updateError } = await supabase.from('profiles').update({ full_name: name.trim(), username: username.trim() || null, bio: bio.trim() || null, location: location.trim() || null, avatar_url: avatarUrl.trim() || null }).eq('id', user.id)
     if (updateError) setError(updateError.message)
     else setMessage('Profile updated successfully.')
     setSaving(false)
@@ -50,6 +52,8 @@ export default function ProfilePage() {
   return <main className="section"><div className="container" style={{maxWidth:760}}>
     <span className="pill">Your profile</span><h1>Edit profile</h1><p className="muted">Keep your HUNAR profile professional and up to date.</p>
     <form className="card" onSubmit={save} style={{marginTop:24, display:'grid', gap:16}}>
+      {avatarUrl && <img src={avatarUrl} alt="Profile preview" className="avatar-large" style={{width:96,height:96,objectFit:'cover',borderRadius:'50%'}} />}
+      <label>Profile photo URL<input value={avatarUrl} onChange={e=>setAvatarUrl(e.target.value)} placeholder="https://..." /></label>
       <label>Full name<input value={name} onChange={e=>setName(e.target.value)} required /></label>
       <label>Email<input value={email} disabled /></label>
       <label>Username<input value={username} onChange={e=>setUsername(e.target.value)} placeholder="your-username" /></label>
