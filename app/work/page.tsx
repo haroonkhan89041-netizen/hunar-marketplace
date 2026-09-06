@@ -29,7 +29,7 @@ export default function Work() {
       <p className="muted">{project.description || 'No description provided.'}</p>
       <p><b>{project.budget_min != null || project.budget_max != null ? `PKR ${Number(project.budget_min ?? 0).toLocaleString()}–${Number(project.budget_max ?? project.budget_min ?? 0).toLocaleString()}` : 'Budget negotiable'}</b></p>
       {project.deadline && <p className="muted">Deadline: {new Date(project.deadline).toLocaleDateString()}</p>}
-      <Link className="btn primary" href="/signup">Submit proposal</Link>
+      <Link className="btn primary" href={`/proposals?project=${project.id}`}>Submit proposal</Link>
     </div>)}</div>}
   </div></main>;
 }
