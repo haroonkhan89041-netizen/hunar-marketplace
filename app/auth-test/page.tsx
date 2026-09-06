@@ -1,0 +1,2 @@
+import Link from 'next/link'
+export default function AuthTest(){return <main className="auth"><h1>HUNAR Authentication</h1><p className="muted">Use the live login and signup pages to access your account.</p><p><Link className="btn primary" href="/login">Log in</Link> <Link className="btn" href="/signup">Create account</Link></p></main>}
