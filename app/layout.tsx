@@ -1,7 +1,14 @@
 import './globals.css';
 import Link from 'next/link';
 
-export const metadata={title:'HUNAR — Pakistan\'s Talent. The World\'s Opportunities.',description:'A professional freelance marketplace for Pakistani talent and global clients.'};
+export const metadata={
+  metadataBase:new URL('https://hunar-marketplace.vercel.app'),
+  title:{default:'HUNAR — Pakistan\'s Talent. The World\'s Opportunities.',template:'%s | HUNAR'},
+  description:'A professional freelance marketplace connecting Pakistani talent with clients around the world.',
+  keywords:['HUNAR','Pakistan freelancers','freelance marketplace','Pakistani talent','hire freelancers','remote work'],
+  alternates:{canonical:'/'},
+  robots:{index:true,follow:true},
+};
 
 export default function RootLayout({children}:{children:React.ReactNode}){
   return <div className="page">
