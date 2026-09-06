@@ -5,48 +5,12 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
-type Project = { id: string; title: string; description: string | null; budget_min: number | null; budget_max: number | null }
-
-export default function ProposalsPage() {
-  const router = useRouter()
-  const params = useSearchParams()
-  const projectId = params.get('project') || ''
-  const [project, setProject] = useState<Project | null>(null)
-  const [coverLetter, setCoverLetter] = useState('')
-  const [bidAmount, setBidAmount] = useState('')
-  const [deliveryDays, setDeliveryDays] = useState('5')
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
-
-  useEffect(() => {
-    async function load() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.replace('/login'); return }
-      if (!projectId) { setError('No project selected.'); setLoading(false); return }
-      const { data, error: projectError } = await supabase.from('projects').select('id,title,description,budget_min,budget_max').eq('id', projectId).single()
-      if (projectError) setError(projectError.message)
-      else { setProject(data); setBidAmount(String(data?.budget_max ?? data?.budget_min ?? '')) }
-      setLoading(false)
-    }
-    load()
-  }, [projectId, router])
-
-  async function submit(e: FormEvent) {
-    e.preventDefault(); setSaving(true); setError(''); setMessage('')
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { router.replace('/login'); return }
-    const amount = Number(bidAmount); const days = Number(deliveryDays)
-    if (!coverLetter.trim() || !Number.isFinite(amount) || amount < 0 || !Number.isInteger(days) || days < 1) { setError('Please enter a proposal, valid bid amount and delivery time.'); setSaving(false); return }
-    const { error: insertError } = await supabase.from('proposals').insert({ project_id: projectId, freelancer_id: user.id, cover_letter: coverLetter.trim(), bid_amount: amount, delivery_days: days })
-    if (insertError) setError(insertError.code === '23505' ? 'You have already submitted a proposal for this project.' : insertError.message)
-    else { setMessage('Proposal submitted successfully. The client can now review your bid.'); setCoverLetter('') }
-    setSaving(false)
-  }
-
-  if (loading) return <main className="section"><div className="container"><p>Loading project...</p></div></main>
-  if (!project) return <main className="section"><div className="container"><div className="card"><h2>Project not found</h2><p className="muted">{error}</p><Link className="btn" href="/work">Back to projects</Link></div></div></main>
-
-  return <main className="section"><div className="container"><span className="pill">Submit proposal</span><h1>{project.title}</h1><p className="muted">{project.description || 'No project description provided.'}</p><p><b>Budget:</b> PKR {Number(project.budget_min ?? 0).toLocaleString()}–{Number(project.budget_max ?? project.budget_min ?? 0).toLocaleString()}</p><form className="card" style={{maxWidth:760,marginTop:28}} onSubmit={submit}><div className="field"><label>Your proposal<textarea rows={7} value={coverLetter} onChange={e=>setCoverLetter(e.target.value)} placeholder="Explain your experience, approach and why you are a good fit..." required /></label></div><div className="grid"><div className="field"><label>Your bid (PKR)<input type="number" min="0" value={bidAmount} onChange={e=>setBidAmount(e.target.value)} required /></label></div><div className="field"><label>Delivery time (days)<input type="number" min="1" step="1" value={deliveryDays} onChange={e=>setDeliveryDays(e.target.value)} required /></label></div></div>{error && <p role="alert">{error}</p>}{message && <p>{message}</p>}<button className="btn primary" disabled={saving}>{saving ? 'Submitting...' : 'Submit proposal'}</button></form></div></main>
+type Project={id:string;title:string;description:string|null;budget_min:number|null;budget_max:number|null}
+export default function ProposalsPage(){
+ const router=useRouter();const params=useSearchParams();const projectId=params.get('project')||'';const [project,setProject]=useState<Project|null>(null);const [coverLetter,setCoverLetter]=useState('');const [bidAmount,setBidAmount]=useState('');const [deliveryDays,setDeliveryDays]=useState('5');const [loading,setLoading]=useState(true);const [saving,setSaving]=useState(false);const [message,setMessage]=useState('');const [error,setError]=useState('')
+ useEffect(()=>{async function load(){const {data:{user}}=await supabase.auth.getUser();if(!user){router.replace('/login');return}if(!projectId){setError('No project selected.');setLoading(false);return}const {data:profile}=await supabase.from('profiles').select('role').eq('id',user.id).single();if(profile?.role!=='freelancer'&&profile?.role!=='admin'){setError('Only freelancers can submit proposals.');setLoading(false);return}const {data,error:e}=await supabase.from('projects').select('id,title,description,budget_min,budget_max').eq('id',projectId).single();if(e)setError(e.message);else{setProject(data);setBidAmount(String(data?.budget_max??data?.budget_min??''))}setLoading(false)}load()},[projectId,router])
+ async function submit(e:FormEvent){e.preventDefault();setSaving(true);setError('');setMessage('');const {data:{user}}=await supabase.auth.getUser();if(!user){router.replace('/login');return}const amount=Number(bidAmount);const days=Number(deliveryDays);if(!coverLetter.trim()||!Number.isFinite(amount)||amount<0||!Number.isInteger(days)||days<1){setError('Please enter a proposal, valid bid amount and delivery time.');setSaving(false);return}const {error:e2}=await supabase.from('proposals').insert({project_id:projectId,freelancer_id:user.id,cover_letter:coverLetter.trim(),bid_amount:amount,delivery_days:days});if(e2)setError(e2.code==='23505'?'You have already submitted a proposal for this project.':e2.message);else{setMessage('Proposal submitted successfully. The client can now review your bid.');setCoverLetter('')}setSaving(false)}
+ if(loading)return <main className="section"><div className="container"><p>Loading project...</p></div></main>
+ if(!project)return <main className="section"><div className="container"><div className="card"><h2>Unable to submit proposal</h2><p className="muted">{error}</p><Link className="btn" href="/work">Back to projects</Link></div></div></main>
+ return <main className="section"><div className="container"><span className="pill">Submit proposal</span><h1>{project.title}</h1><p className="muted">{project.description||'No project description provided.'}</p><p><b>Budget:</b> PKR {Number(project.budget_min??0).toLocaleString()}–{Number(project.budget_max??project.budget_min??0).toLocaleString()}</p><form className="card" style={{maxWidth:760,marginTop:28}} onSubmit={submit}><div className="field"><label>Your proposal<textarea rows={7} value={coverLetter} onChange={e=>setCoverLetter(e.target.value)} placeholder="Explain your experience, approach and why you are a good fit..." required maxLength={3000}/></label><p className="muted">{coverLetter.length}/3000</p></div><div className="grid"><div className="field"><label>Your bid (PKR)<input type="number" min="0" value={bidAmount} onChange={e=>setBidAmount(e.target.value)} required /></label></div><div className="field"><label>Delivery time (days)<input type="number" min="1" step="1" value={deliveryDays} onChange={e=>setDeliveryDays(e.target.value)} required /></label></div></div>{error&&<p role="alert">{error}</p>}{message&&<p role="status">{message}</p>}<button className="btn primary" disabled={saving}>{saving?'Submitting...':'Submit proposal'}</button></form></div></main>
 }
