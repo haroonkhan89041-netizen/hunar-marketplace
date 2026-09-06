@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
 type Order = { id: string; amount_pkr: number; status: string; requirements: string | null; created_at: string; service_id: string | null; client_id: string; freelancer_id: string }
-
 type Profile = { id: string; full_name: string | null }
 
 export default function Orders() {
@@ -41,7 +40,7 @@ export default function Orders() {
   }
 
   return <main className="section"><div className="container">
-    <span className="pill">My orders</span><h1>Orders & delivery</h1><p className="muted">Track purchases, delivery progress and completed work in one place.</p>
+    <div className="sectionhead"><div><span className="pill">My orders</span><h1>Orders & delivery</h1><p className="muted">Track purchases, delivery progress and completed work in one place.</p></div><Link className="btn" href="/dashboard">Dashboard</Link></div>
     {loading ? <p>Loading orders...</p> : orders.length === 0 ? <div className="card"><h3>No orders yet</h3><p className="muted">Your orders will appear here after a client places an order.</p><Link className="btn primary" href="/talent">Find Talent</Link></div> : <div className="grid">{orders.map(order => {
       const isClient = order.client_id === userId
       const otherId = isClient ? order.freelancer_id : order.client_id
