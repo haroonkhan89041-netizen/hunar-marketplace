@@ -1,0 +1,3 @@
+import Link from 'next/link';
+const projects=['Build a responsive SaaS dashboard','Create a brand identity for a startup','Edit 10 short-form videos','Develop an e-commerce website'];
+export default function Work(){return <main className="section"><div className="container"><span className="pill">Find Work</span><h1>Projects from clients worldwide</h1><div className="grid">{projects.map((p,i)=><div className="card" key={p}><span className="pill">Fixed price</span><h3>{p}</h3><p className="muted">Skills: React · Design · Communication</p><p><b>PKR {25000+i*10000}–{60000+i*15000}</b></p><Link className="btn primary" href="/signup">Submit proposal</Link></div>)}</div></div></main>}

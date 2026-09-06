@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export default function Categories(){return <main className="section"><div className="container"><h1>Explore HUNAR categories</h1><div className="grid">{['Programming & Tech','Graphics & Design','Digital Marketing','Writing & Translation','Video & Animation','Business & Consulting','AI Services','Data & Analytics'].map(x=><Link className="card" href="/talent" key={x}><h3>{x}</h3><p className="muted">Browse services and freelancers</p></Link>)}</div></div></main>}
