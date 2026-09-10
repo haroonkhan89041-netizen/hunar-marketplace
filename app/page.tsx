@@ -9,4 +9,39 @@ const people=[['Zainab Malik','Full-Stack Developer','PKR 8,000','https://images
 export default function Home(){
  const [query,setQuery]=useState('')
  const searchHref=query.trim()?`/talent?q=${encodeURIComponent(query.trim())}`:'/talent'
- return <><main><section className="hero"><div className="container"><span className="pill">Built for Pakistani talent</span><h1>Hire Pakistan's Best Talent. Build Without Limits.</h1><p>Find verified freelancers, launch projects, and work securely with HUNAR — a modern marketplace connecting Pakistani talent with clients worldwide.</p><label htmlFor="home-search" style={{display:'block',fontWeight:700,marginBottom:8}}>Search for a service</label><div className="search"><input id="home-search" aria-label="Search for a service" value={query} onChange={e=>setQuery(e.target.value)} onKeyDown={e=>{if(e.key==='Enter')window.location.href=searchHref}} placeholder="What service are you looking for?"/><Link className="btn primary" href={searchHref}>Search</Link></div><div style={{display:'flex',gap:12,flexWrap:'wrap',marginTop:18}}><Link className="btn" href="/work">Post a project</Link><Link className="btn" href="/signup">Become a freelancer</Link></div></div></section><section className="section"><div className="container"><div className="sectionHeader"><div><h2>Popular categories</h2><p className="muted">Explore skills clients are hiring for on HUNAR.</p></div><Link href="/categories" className="btn">View all</Link></div><div className="grid">{cats.map(([c,img])=><Link className="card image-card" href={`/talent?category=${encodeURIComponent(c)}`} key={c}><img src={img} alt="" loading="lazy"/><div><b>{c}</b><p className="muted">Explore top HUNAR talent</p></div></Link>)}</div></div></section><section className="section" style={{background:'#fafafa'}}><div className="container"><div className="sectionHeader"><div><h2>Top freelancers</h2><p className="muted">Discover skilled professionals ready to work.</p></div><Link href="/talent" className="btn">Browse talent</Link></div><div className="grid">{people.map(([n,t,p,img])=><div className="card profile-card" key={n}><img className="avatar-large" src={img} alt={n}/><span className="pill">Verified</span><h3>{n}</h3><p className="muted">{t}</p><p>★ 4.9 · 120+ reviews</p><b>Starting {p}</b><br/><br/><Link className="btn" href={n==='Zainab Malik'?'/freelancer/zainab-malik':'/talent'}>View profile</Link></div>)}</div></div></section><section className="section"><div className="container"><div className="sectionHeader"><div><h2>How HUNAR works</h2><p className="muted">From discovery to delivery, everything stays organized.</p></div><Link href="/how-it-works" className="btn">Learn more</Link></div><div className="grid">{[['1','Discover','Search verified talent or projects.'],['2','Hire','Agree on scope, price and deadline.'],['3','Work securely','Use protected orders and messaging.'],['4','Complete','Approve delivery and leave a review.']].map(x=><div className="card" key={x[0]}><span className="pill">{x[0]}</span><h3>{x[1]}</h3><p className="muted">{x[2]}</p></div>)}</div></div></section><section className="section"><div className="container"><div className="card" style={{textAlign:'center'}}><h2>Ready to get started?</h2><p className="muted">Hire skilled Pakistani talent or start earning from your skills.</p><div style={{display:'flex',justifyContent:'center',gap:12,flexWrap:'wrap',marginTop:18}}><Link className="btn primary" href="/talent">Find Talent</Link><Link className="btn" href="/signup">Join HUNAR</Link></div></div></div></section></main></>}
+ return <main>
+  <section className="hero">
+   <div className="container">
+    <span className="pill">Pakistan's talent · Global opportunities</span>
+    <h1>Talent without borders.<br/><em>Work without limits.</em></h1>
+    <p>HUNAR is the premium marketplace for discovering Pakistani freelancers, launching projects, and building with exceptional people around the world.</p>
+    <div className="search">
+      <input id="home-search" aria-label="Search for a service" value={query} onChange={e=>setQuery(e.target.value)} onKeyDown={e=>{if(e.key==='Enter')window.location.href=searchHref}} placeholder="What do you need help with?"/>
+      <Link className="btn primary" href={searchHref}>Explore talent ↗</Link>
+    </div>
+    <div style={{display:'flex',gap:12,flexWrap:'wrap',marginTop:10}}>
+      <Link className="btn" href="/work">Post a project</Link>
+      <Link className="btn" href="/signup">Join HUNAR</Link>
+    </div>
+    <div style={{display:'flex',gap:28,flexWrap:'wrap',marginTop:46,color:'#777e96',fontSize:12,textTransform:'uppercase',letterSpacing:'.1em'}}><span>✓ Verified talent</span><span>✓ Secure projects</span><span>✓ Global clients</span></div>
+   </div>
+  </section>
+
+  <section className="section"><div className="container">
+   <div className="sectionHeader"><div><span className="pill">Explore the network</span><h2 style={{marginTop:16}}>What are you looking for?</h2><p className="muted">Browse the skills and services clients hire on HUNAR.</p></div><Link href="/categories" className="btn">View all categories ↗</Link></div>
+   <div className="grid">{cats.map(([c,img],i)=><Link className="card image-card" href={`/talent?category=${encodeURIComponent(c)}`} key={c}><img src={img} alt="" loading="lazy"/><div><span style={{color:'#6068e6',fontSize:11,fontWeight:800}}>0{i+1}</span><br/><b>{c}</b><p className="muted">Explore top HUNAR talent →</p></div></Link>)}</div>
+  </div></section>
+
+  <section className="section"><div className="container">
+   <div className="sectionHeader"><div><span className="pill">Featured talent</span><h2 style={{marginTop:16}}>People worth working with.</h2><p className="muted">Discover skilled professionals ready to take your next idea forward.</p></div><Link href="/talent" className="btn">Browse talent ↗</Link></div>
+   <div className="grid">{people.map(([n,t,p,img])=><div className="card profile-card" key={n}><img className="avatar-large" src={img} alt={n}/><span className="pill">Verified</span><h3>{n}</h3><p className="muted">{t}</p><p style={{color:'#d6d9e7'}}>★ 4.9 <span className="muted">· 120+ reviews</span></p><b>Starting {p}</b><br/><br/><Link className="btn" href={n==='Zainab Malik'?'/freelancer/zainab-malik':'/talent'}>View profile ↗</Link></div>)}</div>
+  </div></section>
+
+  <section className="section"><div className="container">
+   <div className="sectionHeader"><div><span className="pill">Simple by design</span><h2 style={{marginTop:16}}>From idea to delivery.</h2><p className="muted">A focused workflow that keeps projects moving.</p></div><Link href="/how-it-works" className="btn">How it works ↗</Link></div>
+   <div className="grid">{[['01','Discover','Search verified talent or projects.'],['02','Connect','Agree on scope, price and deadline.'],['03','Create','Work securely with organized messaging.'],['04','Deliver','Approve the work and leave a review.']].map(x=><div className="card" key={x[0]}><span style={{fontFamily:'monospace',color:'#6068e6',fontSize:13}}>{x[0]}</span><h3>{x[1]}</h3><p className="muted">{x[2]}</p></div>)}</div>
+  </div></section>
+
+  <section className="section"><div className="container"><div className="card" style={{padding:'70px 30px',textAlign:'center',background:'radial-gradient(circle at 50% 0%,rgba(96,104,230,.18),transparent 55%),linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.015))'}}><span className="pill">Ready when you are</span><h2 style={{fontSize:'clamp(42px,6vw,70px)',marginTop:22}}>Build something<br/><span style={{color:'#989fe2'}}>remarkable.</span></h2><p className="muted" style={{maxWidth:560,margin:'0 auto',lineHeight:1.7}}>Hire skilled Pakistani talent or turn your own skills into opportunities with HUNAR.</p><div style={{display:'flex',justifyContent:'center',gap:12,flexWrap:'wrap',marginTop:26}}><Link className="btn primary" href="/talent">Find talent ↗</Link><Link className="btn" href="/signup">Start earning ↗</Link></div></div></div></section>
+ </main>
+}
