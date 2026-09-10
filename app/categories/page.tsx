@@ -1,25 +1,16 @@
 import Link from 'next/link'
 
 const categories = [
-  ['Programming & Tech','Websites, apps, software and development','💻'],
-  ['Graphics & Design','Logos, branding, UI/UX and creative design','🎨'],
-  ['Digital Marketing','SEO, social media, ads and growth','📈'],
-  ['Writing & Translation','Articles, copywriting, translation and editing','✍️'],
-  ['Video & Animation','Video editing, motion graphics and animation','🎬'],
-  ['Business & Consulting','Business plans, research and professional support','💼'],
-  ['AI Services','AI automation, chatbots and intelligent tools','🤖'],
-  ['Data & Analytics','Data entry, dashboards, analysis and reporting','📊'],
+  ['Programming & Tech','Websites, apps, software and development','01','⌁'],
+  ['Graphics & Design','Logos, branding, UI/UX and creative design','02','✦'],
+  ['Digital Marketing','SEO, social media, ads and growth','03','↗'],
+  ['Writing & Translation','Articles, copywriting, translation and editing','04','Aa'],
+  ['Video & Animation','Video editing, motion graphics and animation','05','▶'],
+  ['Business & Consulting','Business plans, research and professional support','06','◎'],
+  ['AI Services','AI automation, chatbots and intelligent tools','07','⌘'],
+  ['Data & Analytics','Data entry, dashboards, analysis and reporting','08','▦'],
 ]
 
 export default function Categories(){
-  return <main className="section"><div className="container">
-    <span className="pill">Explore skills</span>
-    <h1>Find the right talent for your next project</h1>
-    <p className="muted" style={{maxWidth:720}}>Browse HUNAR categories and discover Pakistani freelancers offering professional services for local and global clients.</p>
-    <div className="sectionHeader" style={{marginTop:32,alignItems:'end'}}><div><h2>Popular services</h2><p className="muted">Choose a category to see matching freelancers and services.</p></div><Link href="/talent" className="btn">Browse all talent</Link></div>
-    <div className="grid" style={{marginTop:20}}>{categories.map(([name,desc,icon])=><Link className="card category-card" href={`/talent?category=${encodeURIComponent(name)}`} key={name} aria-label={`Explore ${name}`}>
-      <div aria-hidden="true" style={{fontSize:34,marginBottom:12}}>{icon}</div><h3 style={{overflowWrap:'anywhere'}}>{name}</h3><p className="muted" style={{overflowWrap:'anywhere'}}>{desc}</p><span className="btn">Explore <span aria-hidden="true">→</span></span>
-    </Link>)}</div>
-    <div className="card" style={{marginTop:32,textAlign:'center'}}><h2>Can’t find what you need?</h2><p className="muted">Post a project and let skilled freelancers send you proposals.</p><Link className="btn primary" href="/project/new" style={{marginTop:14}}>Post a project</Link></div>
-  </div></main>
+ return <main className="section discovery"><div className="container"><div className="discoveryHero"><span className="pill">HUNAR Skill Directory</span><h1>Everything you need. <span>One network.</span></h1><p>Browse the skills powering modern businesses. Find Pakistani specialists for digital products, creative work, growth and operations.</p></div><div className="categoryGrid">{categories.map(([name,desc,index,icon])=><Link className="card categoryCard" href={`/talent?category=${encodeURIComponent(name)}`} key={name} aria-label={`Explore ${name}`}><span className="categoryIndex">CAT / {index}</span><div><div className="categoryIcon" aria-hidden="true">{icon}</div><h3>{name}</h3><p className="muted">{desc}</p></div><span className="categoryArrow">Explore specialists →</span></Link>)}</div><div className="card" style={{marginTop:48,textAlign:'left',padding:'30px'}}><span className="pill">Need something specific?</span><h2 style={{marginTop:18}}>Turn your brief into a project.</h2><p className="muted" style={{maxWidth:650,lineHeight:1.7}}>Tell HUNAR what you need and let skilled freelancers come to you with proposals.</p><Link className="btn primary" href="/project/new" style={{marginTop:14}}>Post a project ↗</Link></div></div></main>
 }
